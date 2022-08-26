@@ -1,0 +1,2 @@
+mongo -u ramzi
+exit

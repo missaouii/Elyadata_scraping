@@ -1,0 +1,45 @@
+version: '3.1'
+
+services:
+  chrome:
+    image: selenium/standalone-chrome:latest
+    hostname: chrome
+    environment:
+      - START_XVFB=false
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+      - SE_NODE_MAX_SESSIONS=5
+      - JAVA_OPTS=-XX:ActiveProcessorCount=5
+      - SE_DETECT-DRIVERS="true"
+      - SE_DRIVERS=["chrome"]
+
+    ports:
+      - "5900:5900"
+      - "4444:4444"
+    privileged: true
+    shm_size: 2g
+
+  Scarping:
+    image: ramzimissaoui/elyadata:2.2.9
+    hostname: Scraping
+    ports:
+      - "8090:8000"
+    privileged: true
+    shm_size: 2g
+    
+   
+
+  mongo:
+    image: mongo:latest
+    container_name: 'mongo' 
+    environment:
+      - MONGO_INITDB_DATABASE=Elyadata # database name 
+      - MONGO_INITDB_ROOT_USERNAME=ramzi #  username
+      - MONGO_INITDB_ROOT_PASSWORD=ramzi #  password
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - mongodata:/data/db
+    ports:
+      - '27017-27019:27017-27019'
+    
+volumes:
+  mongodata: 
